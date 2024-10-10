@@ -1,0 +1,21 @@
+'''Desenvolva um script SQL para calcular a receita acumulada para os meses disponíveis em 2023, de acordo com a tabela de receita ao lado.'''
+
+WITH CTE AS (
+    SELECT 
+        year, 
+        consultant_name, 
+        sale_amount, 
+        branch, 
+        ROW_NUMBER() OVER (PARTITION BY year ORDER BY sale_amount DESC) AS row_number
+    FROM 
+        yearly_sales
+)
+SELECT 
+    year, 
+    consultant_name, 
+    sale_amount, 
+    branch
+FROM 
+    CTE
+WHERE 
+    row_number = 1;

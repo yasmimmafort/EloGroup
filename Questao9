@@ -1,0 +1,13 @@
+'''Desenvolva um script em SQL para encontrar o consultor que realizou vendas com os valores máximos durante os anos 
+2021, 2022, 2023, baseando-se na tabela ao lado'''
+
+SELECT 
+    department, 
+    name, 
+    last_name, 
+    salary, 
+    RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS ranking, 
+    COUNT(*) OVER (PARTITION BY department) AS total_funcionarios, 
+    AVG(salary) OVER (PARTITION BY department) AS salario_medio 
+FROM 
+    employee;
