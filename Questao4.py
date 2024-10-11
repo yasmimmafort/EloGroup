@@ -17,16 +17,18 @@ df = pd.DataFrame(dados)
 df['Data'] = pd.to_datetime(df['Data'])
 df = df.sort_values(by=['ID_Usuario', 'Data']).drop_duplicates()
 
+dias_consecutivos = 0
+
 def logins_consecutivos(df, dias_consecutivos):
-    if dias_consecutivos < 1:
-        return []
     usuarios_consecutivos = []
     for usuario, grupo in df.groupby('ID_Usuario'):
         if any(grupo['Data'].diff().dt.days[1:].rolling(dias_consecutivos - 1).sum() == dias_consecutivos - 1):
             usuarios_consecutivos.append(usuario)
     return usuarios_consecutivos
 
-dias_consecutivos = 3
-usuarios_consecutivos = logins_consecutivos(df, dias_consecutivos)
-print(f"Usuários ativos por {dias_consecutivos} dias consecutivos:", usuarios_consecutivos)
-
+if dias_consecutivos < 1:
+    print("Nenhum usuário ativo por 0 dias consecutivos.")
+else:
+    usuarios_consecutivos = logins_consecutivos(df, dias_consecutivos)
+    print(f"Usuários ativos por {dias_consecutivos} dias consecutivos:", usuarios_consecutivos)
+    
